@@ -32,16 +32,23 @@ namespace JohaToolkit.UnityEngine.UI
         }
         
         [Header("WARNING: Interrupts Standard event propagation!")]
+        [Header("INFO: Propagation doesn't jumps over empty gameObjects!")]
         
         [SerializeField] private UIEventType uiEventTypesToIntercept;
+        [SerializeField, Tooltip("Normally, Events are caught and are not propagated. (e.g. 'OnSubmit' on Buttons) Enable 'OnSubmit' here to propagate the event anyways")] private UIEventType uiEventTypesToPropagateAlways;
         
         private bool IsUIEventTypeSelected(UIEventType uiEventType) => (uiEventType & uiEventTypesToIntercept) == uiEventType;
 
+        private bool IsUIEventTypeMarkedAsPropagateAlways(UIEventType uiEventType) => (uiEventType & uiEventTypesToPropagateAlways) == uiEventType;
+        
         private void Execute<T>(UIEventType eventType, Action<T> action)
         {
             if (!IsUIEventTypeSelected(eventType))
                 return;
             transform.parent.TryGetComponent(out T parentHandler);
+            // if this object Recieves the event, we don't want to propagate the event
+            if (TryGetComponent<T>(out _) && !IsUIEventTypeMarkedAsPropagateAlways(eventType))
+                return;
             action?.Invoke(parentHandler);
         }
         
