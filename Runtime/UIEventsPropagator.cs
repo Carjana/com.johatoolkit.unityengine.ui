@@ -47,11 +47,15 @@ namespace JohaToolkit.UnityEngine.UI
                 return;
             transform.parent.TryGetComponent(out T parentHandler);
             // if this object Recieves the event, we don't want to propagate the event
-            if (TryGetComponent<T>(out _) && !IsUIEventTypeMarkedAsPropagateAlways(eventType))
-                return;
-            action?.Invoke(parentHandler);
+            if(IsUIEventTypeMarkedAsPropagateAlways(eventType) || !IsInterceptedByThisObjects<T>())
+                action?.Invoke(parentHandler);
         }
-        
+
+        private bool IsInterceptedByThisObjects<T>()
+        {
+            return GetComponents<T>().Length >= 2;
+        }
+
         public void OnPointerEnter(PointerEventData eventData) => Execute<IPointerEnterHandler>(UIEventType.PointerEnter, parentHandler => parentHandler.OnPointerEnter(eventData));
         
         public void OnPointerExit(PointerEventData eventData) => Execute<IPointerExitHandler>(UIEventType.PointerExit, parentHandler => parentHandler.OnPointerExit(eventData));
