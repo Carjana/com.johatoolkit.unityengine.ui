@@ -1,0 +1,10 @@
+{
+    "name": "com.johatoolkit.unityengine.ui",
+    "version": "1.0.0",
+    "displayName": "JohaToolkit.UnityEngine.UI",
+    "description": "This is the ui Package which includes many little helpers",
+    "author": {
+      "name": "Joshua"
+    },
+    "unity": "6000.0"
+  }
