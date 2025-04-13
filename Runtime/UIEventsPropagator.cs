@@ -31,6 +31,8 @@ namespace JohaToolkit.UnityEngine.UI
             Cancel = 65536
         }
         
+        [Header("WARNING: Interrupts Standard event propagation!")]
+        
         [SerializeField] private UIEventType uiEventTypesToIntercept;
         
         private bool IsUIEventTypeSelected(UIEventType uiEventType) => (uiEventType & uiEventTypesToIntercept) == uiEventType;
